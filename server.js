@@ -15,10 +15,22 @@ var schema = buildSchema(`
     name: String
     age: Int
   }
+  input OrderInput {
+    name: String!
+    price: Int!
+  }
+  type Order {
+    id: String
+    name: String
+    price: Int
+  }
   type Query {
     users: [User]
-    getDie(numSides: Int): RandomDie
+    getDie(numSides: Int): RandomDie    
   }
+  type Mutation {
+    createOrder(input: OrderInput): Order
+  } 
 `);
 
 // This class implements the RandomDie GraphQL type
@@ -48,6 +60,14 @@ class User {
   }
 }
 
+class Order {
+  constructor(id, name, price){
+    this.id = id;
+    this.name = name;
+    this.price = price;
+  }
+}
+
 let users = [
   new User(1, "Jason", "18"),
   new User(2, "John", 19),
@@ -64,11 +84,14 @@ class AppError extends Error {
 // The root provides the top-level API endpoints
 var root = {
   users: function () {
-    throw new AppError("INVALID_INPUT", "test code")
+    //throw new AppError("INVALID_INPUT", "test code")
     return users;
   },
   getDie: function ({numSides}) {
     return new RandomDie(numSides || 6);
+  },
+  createOrder: function ({input}) {
+    return new Order(3, input.name, input.price);
   }
 }
 
