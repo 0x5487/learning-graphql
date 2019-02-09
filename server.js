@@ -83,24 +83,44 @@ class AppError extends Error {
 
 // The root provides the top-level API endpoints
 var root = {
-  users: function () {
+  users: async (args, context) =>{
     //throw new AppError("INVALID_INPUT", "test code")
+    console.log(context.test);
     return users;
   },
-  getDie: function ({numSides}) {
+  getDie: async ({numSides}, context) => {
     return new RandomDie(numSides || 6);
   },
-  createOrder: function ({input}) {
+  createOrder: async ({input}, context) => {
     return new Order(3, input.name, input.price);
   }
 }
 
 var app = express();
-app.use('/graphql', graphqlHTTP({
+// app.use('/graphql', graphqlHTTP({
+//   schema: schema,
+//   rootValue: root,
+//   formatError, 
+//   graphiql: true,
+// }));
+
+app.use('/graphql', graphqlHTTP(async (request, response, graphQLParams) => ({
   schema: schema,
   rootValue: root,
   formatError, 
   graphiql: true,
-}));
+  context : {
+    request: {request, response},
+    test: 'Example context value'
+}
+})));
+
+
+// app.use('/graphql', graphqlHTTP((req, res) => ({
+//   schema,
+//   graphiql: true,
+//   context: { req, res },
+// })));
+
 app.listen(4000);
-console.log('Running a GraphQL API server at localhost:4000/graphql');
+console.log('Running a GraphQL API server at http://localhost:4000/graphql');
