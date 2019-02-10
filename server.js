@@ -83,9 +83,10 @@ class AppError extends Error {
 
 // The root provides the top-level API endpoints
 var root = {
-  users: async (args, context) =>{
+  users: async (_, context) =>{
     //throw new AppError("INVALID_INPUT", "test code")
     console.log(context.test);
+    console.log(context.request.baseUrl);
     return users;
   },
   getDie: async ({numSides}, context) => {
@@ -97,12 +98,6 @@ var root = {
 }
 
 var app = express();
-// app.use('/graphql', graphqlHTTP({
-//   schema: schema,
-//   rootValue: root,
-//   formatError, 
-//   graphiql: true,
-// }));
 
 app.use('/graphql', graphqlHTTP(async (request, response, graphQLParams) => ({
   schema: schema,
@@ -110,7 +105,8 @@ app.use('/graphql', graphqlHTTP(async (request, response, graphQLParams) => ({
   formatError, 
   graphiql: true,
   context : {
-    request: {request, response},
+    request: request,
+    response: response,
     test: 'Example context value'
 }
 })));
