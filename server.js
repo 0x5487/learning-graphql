@@ -14,6 +14,7 @@ var schema = buildSchema(`
     id: Int
     name: String
     age: Int
+    count: Int
   }
   input OrderInput {
     name: String!
