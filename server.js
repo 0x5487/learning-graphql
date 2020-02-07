@@ -1,38 +1,14 @@
+var fs = require('fs');
 var express = require('express');
 var graphqlHTTP = require('express-graphql');
 var { buildSchema } = require('graphql');
-const formatError = require('./formatError');
+
+// read grahpql schema file
+var schemaContent = fs.readFileSync('./schema.graphql', 'utf8');
+
 
 // Construct a schema, using GraphQL schema language
-var schema = buildSchema(`
-  type RandomDie {
-    numSides: Int!
-    rollOnce: Int!
-    roll(numRolls: Int!): [Int]
-  }
-  type User {
-    id: Int
-    name: String
-    age: Int
-    count: Int
-  }
-  input OrderInput {
-    name: String!
-    price: Int!
-  }
-  type Order {
-    id: String
-    name: String
-    price: Int
-  }
-  type Query {
-    users: [User]
-    getDie(numSides: Int): RandomDie    
-  }
-  type Mutation {
-    createOrder(input: OrderInput): Order
-  } 
-`);
+var schema = buildSchema(schemaContent);
 
 // This class implements the RandomDie GraphQL type
 class RandomDie {
@@ -44,7 +20,7 @@ class RandomDie {
     return 1 + Math.floor(Math.random() * this.numSides);
   }
 
-  roll({numRolls}) {
+  roll({ numRolls }) {
     var output = [];
     for (var i = 0; i < numRolls; i++) {
       output.push(this.rollOnce());
@@ -53,16 +29,31 @@ class RandomDie {
   }
 }
 
-class User {
-  constructor(id, name, age){
-    this.id = id;
-    this.name = name;
-    this.age = age;
+class Note {
+  constructor(id, data) {
+    this.id = id
+    this.data = data
   }
 }
 
+class User {
+  height = 3  
+
+  constructor(id, name, age) {
+    this.id = id;
+    this.name = name;
+    this.age = age;
+    this.notes = [new Note(2, "data1")]
+  }
+
+  count() {
+    return 6;
+  }
+}
+
+
 class Order {
-  constructor(id, name, price){
+  constructor(id, name, price) {
     this.id = id;
     this.name = name;
     this.price = price;
@@ -84,17 +75,19 @@ class AppError extends Error {
 
 // The root provides the top-level API endpoints
 var root = {
-  users: async (_, context) =>{
-    //throw new AppError("INVALID_INPUT", "test code")
+  users: async (_, context) => {
     console.log(context.test);
     console.log(context.request.baseUrl);
     return users;
   },
-  getDie: async ({numSides}, context) => {
+  getDie: async ({ numSides }, context) => {
     return new RandomDie(numSides || 6);
   },
-  createOrder: async ({input}, context) => {
+  createOrder: async ({ input }, context) => {
     return new Order(3, input.name, input.price);
+  },
+  getError: async(_, context) => {
+    throw new AppError("INVALID_INPUT", "test code")
   }
 }
 
@@ -103,21 +96,14 @@ var app = express();
 app.use('/graphql', graphqlHTTP(async (request, response, graphQLParams) => ({
   schema: schema,
   rootValue: root,
-  formatError, 
   graphiql: true,
-  context : {
+  context: {
     request: request,
     response: response,
     test: 'Example context value'
-}
+  }
 })));
 
-
-// app.use('/graphql', graphqlHTTP((req, res) => ({
-//   schema,
-//   graphiql: true,
-//   context: { req, res },
-// })));
 
 app.listen(4000);
 console.log('Running a GraphQL API server at http://localhost:4000/graphql');

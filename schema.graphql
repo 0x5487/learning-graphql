@@ -1,0 +1,34 @@
+type RandomDie {
+  numSides: Int!
+  rollOnce: Int!
+  roll(numRolls: Int!): [Int]
+}
+type User {
+  id: ID!
+  name: String!
+  age: Int!
+  count: Int!
+  height: Int!
+  notes: [Note!]!
+}
+type Note {
+  id: ID!
+  data: String!
+}
+input OrderInput {
+  name: String!
+  price: Int!
+}
+type Order {
+  id: ID!
+  name: String!
+  price: Int!
+}
+type Query {
+  users: [User!]!
+  getDie(numSides: Int): RandomDie
+  getError: String!
+}
+type Mutation {
+  createOrder(input: OrderInput): Order
+}
