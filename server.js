@@ -51,6 +51,20 @@ class User {
   }
 }
 
+class Meta {
+  constructor() {
+
+  }
+}
+
+
+class UserList {
+  constructor(meta, users) {
+    this.meta = meta;
+    this.users = users;
+  }
+}
+
 
 class Order {
   constructor(id, name, price) {
@@ -60,11 +74,11 @@ class Order {
   }
 }
 
-let users = [
-  new User(1, "Jason", "18"),
-  new User(2, "John", 19),
-  new User(3, "Nick", 20),
-];
+let users = [];
+
+for (var i=1; i < 100; i++) {
+  users.push(new User(i, "Jason_" + i, 20+i))
+}
 
 class AppError extends Error {
   constructor(code, message) {
@@ -75,10 +89,17 @@ class AppError extends Error {
 
 // The root provides the top-level API endpoints
 var root = {
-  users: async (_, context) => {
-    console.log(context.test);
-    console.log(context.request.baseUrl);
-    return users;
+  usersList: async ( {opts}, context) => {
+    //console.log(context.test);
+    //console.log(context.request.baseUrl);
+
+    meta = new Meta();
+    meta.page = opts.page;
+    meta.pageSize = opts.pageSize;
+
+    userList = new UserList(meta, users);
+
+    return userList;
   },
   getDie: async ({ numSides }, context) => {
     return new RandomDie(numSides || 6);

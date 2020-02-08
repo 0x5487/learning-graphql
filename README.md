@@ -15,21 +15,27 @@
 1. node server.js
 1. browser to http://localhost:4000/graphql
 
-# example
+# query example
 ```
-query {
-  getDie(numSides: 1){
+{
+  getDie(numSides: 1) {
     numSides
   }
-  users {
-    id
-    age
-    name
-    count
-    height
-    notes {
+  usersList(opts: {page: 2, pageSize: 30}) {
+    meta {
+			page
+      pageSize
+    }
+    users {
       id
-      data
+      age
+      name
+      count
+      height
+      notes {
+        id
+        data
+      }
     }
   }
 }

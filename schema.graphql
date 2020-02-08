@@ -17,6 +17,17 @@ type User {
   "Description for argument"
   notes: [Note!]!
 }
+
+type Meta {
+  page: Int!
+  pageSize: Int!
+}
+
+type UserList {
+  meta: Meta
+  users: [User!]!
+}
+
 type Note {
   id: ID!
   data: String!
@@ -30,8 +41,16 @@ type Order {
   name: String!
   price: Int!
 }
+
+input FindUserOptions {
+  page: Int!
+  pageSize: Int!
+}
+
+
+
 type Query {
-  users: [User!]!
+  usersList(opts: FindUserOptions): UserList
   getDie(numSides: Int): RandomDie
   getError: String!
 }
