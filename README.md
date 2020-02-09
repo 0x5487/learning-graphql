@@ -3,10 +3,12 @@
 1. 權限認證
 1. Versioning
 1. Validation
-1. Error handling
+1. Error handling with http status change
 1. 
 
 # why we are using graphql
+1. aggregation layer
+1. 把全部的 request 都轉到 graphql 之後有要重構比較方便
 
 
 
@@ -42,3 +44,5 @@
 ```
 
 
+## Reference:
+Custom Error: https://stackoverflow.com/questions/42937502/graphql-how-to-respond-with-different-status-code

@@ -2,6 +2,7 @@ var fs = require('fs');
 var express = require('express');
 var graphqlHTTP = require('express-graphql');
 var { buildSchema } = require('graphql');
+var { GraphQLError } = require('graphql');
 
 // read grahpql schema file
 var schemaContent = fs.readFileSync('./schema.graphql', 'utf8');
@@ -93,6 +94,10 @@ var root = {
     //console.log(context.test);
     //console.log(context.request.baseUrl);
 
+    // validate permission
+    token = context.request.header("Authorization");
+    console.log("token: " + token);
+
     meta = new Meta();
     meta.page = opts.page;
     meta.pageSize = opts.pageSize;
@@ -108,7 +113,10 @@ var root = {
     return new Order(3, input.name, input.price);
   },
   getError: async(_, context) => {
-    throw new AppError("INVALID_INPUT", "test code")
+    // context.response.status(400);
+    err = new GraphQLError("bad request")
+    err.extensions = {"code": "1234567"}
+    throw err
   }
 }
 

@@ -52,7 +52,7 @@ input FindUserOptions {
 type Query {
   usersList(opts: FindUserOptions): UserList
   getDie(numSides: Int): RandomDie
-  getError: String!
+  getError: String
 }
 type Mutation {
   createOrder(input: OrderInput): Order
