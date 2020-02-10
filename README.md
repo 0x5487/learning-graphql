@@ -10,7 +10,3 @@
 1. aggregation layer
 1. 把全部的 request 都轉到 graphql 之後有要重構比較方便
 1. 方便維護 api documents
-
-
-## Reference:
-Custom Error: https://stackoverflow.com/questions/42937502/graphql-how-to-respond-with-different-status-code
