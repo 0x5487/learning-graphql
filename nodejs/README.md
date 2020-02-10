@@ -4,7 +4,7 @@
 1. browser to http://localhost:4000/graphql
 
 ## query example
-```
+```gql
 {
   getDie(numSides: 1) {
     numSides
