@@ -2,7 +2,15 @@ type Todo {
   id: ID!
   text: String!
   done: Boolean!
+  count: Int!
+  status: TodoStatus!
   user: User!
+}
+
+enum TodoStatus {
+  created
+  deleted
+  edited
 }
 
 type User {
@@ -15,8 +23,17 @@ input NewTodo {
   userId: String!
 }
 
+input FindTodoOptions {
+  page: Int!
+  pageSize: Int!
+  text: String!
+  count: Int!
+  done: Boolean
+}
+
+
 type Query {
-  todos: [Todo!]!
+  todos(opts: FindTodoOptions!): [Todo!]!
   getError: String!
   totalCount: Int!
 }

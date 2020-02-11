@@ -8,7 +8,7 @@ go run github.com/99designs/gqlgen -v
 query
 ```gql
 query findTodos {
-  todos{
+  todos(opts:{page:1, pageSize:25, text:"", count:0}){
     id
     text
     done

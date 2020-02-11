@@ -2,19 +2,78 @@
 
 package golang
 
+import (
+	"fmt"
+	"io"
+	"strconv"
+)
+
+type FindTodoOptions struct {
+	Page     int    `json:"page"`
+	PageSize int    `json:"pageSize"`
+	Text     string `json:"text"`
+	Count    int    `json:"count"`
+	Done     *bool  `json:"done"`
+}
+
 type NewTodo struct {
 	Text   string `json:"text"`
 	UserID string `json:"userId"`
 }
 
 type Todo struct {
-	ID   string `json:"id"`
-	Text string `json:"text"`
-	Done bool   `json:"done"`
-	User *User  `json:"user"`
+	ID     string     `json:"id"`
+	Text   string     `json:"text"`
+	Done   bool       `json:"done"`
+	Count  int        `json:"count"`
+	Status TodoStatus `json:"status"`
+	User   *User      `json:"user"`
 }
 
 type User struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
+}
+
+type TodoStatus string
+
+const (
+	TodoStatusCreated TodoStatus = "created"
+	TodoStatusDeleted TodoStatus = "deleted"
+	TodoStatusEdited  TodoStatus = "edited"
+)
+
+var AllTodoStatus = []TodoStatus{
+	TodoStatusCreated,
+	TodoStatusDeleted,
+	TodoStatusEdited,
+}
+
+func (e TodoStatus) IsValid() bool {
+	switch e {
+	case TodoStatusCreated, TodoStatusDeleted, TodoStatusEdited:
+		return true
+	}
+	return false
+}
+
+func (e TodoStatus) String() string {
+	return string(e)
+}
+
+func (e *TodoStatus) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = TodoStatus(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid TodoStatus", str)
+	}
+	return nil
+}
+
+func (e TodoStatus) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
 }

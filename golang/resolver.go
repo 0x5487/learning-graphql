@@ -26,7 +26,7 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input NewTodo) (bool,
 
 type queryResolver struct{ *Resolver }
 
-func (r *queryResolver) Todos(ctx context.Context) ([]*Todo, error) {
+func (r *queryResolver) Todos(ctx context.Context, opts FindTodoOptions) ([]*Todo, error) {
 	todos := []*Todo{}
 
 	for i := 1; i < 10; i++ {
