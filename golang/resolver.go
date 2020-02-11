@@ -3,6 +3,7 @@ package golang
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/jasonsoft/log"
 	"github.com/vektah/gqlparser/gqlerror"
@@ -37,6 +38,7 @@ func (r *queryResolver) Todos(ctx context.Context, opts FindTodoOptions) ([]*Tod
 				ID:   fmt.Sprintf("user_%d", i),
 				Name: fmt.Sprintf("name_%d", i),
 			},
+			CreatedAt: time.Now().UTC(),
 		}
 		todos = append(todos, &todo)
 

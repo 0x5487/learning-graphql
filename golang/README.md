@@ -16,6 +16,7 @@ query findTodos {
       id
       name
     }
+    createdAt
   }
   totalCount
 }

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"strconv"
+	"time"
 )
 
 type FindTodoOptions struct {
@@ -22,12 +23,13 @@ type NewTodo struct {
 }
 
 type Todo struct {
-	ID     string     `json:"id"`
-	Text   string     `json:"text"`
-	Done   bool       `json:"done"`
-	Count  int        `json:"count"`
-	Status TodoStatus `json:"status"`
-	User   *User      `json:"user"`
+	ID        string     `json:"id"`
+	Text      string     `json:"text"`
+	Done      bool       `json:"done"`
+	Count     int        `json:"count"`
+	Status    TodoStatus `json:"status"`
+	User      *User      `json:"user"`
+	CreatedAt time.Time  `json:"createdAt"`
 }
 
 type User struct {
