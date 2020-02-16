@@ -2,11 +2,11 @@ package golang
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
 	"github.com/jasonsoft/log"
-	"github.com/vektah/gqlparser/gqlerror"
 ) // THIS CODE IS A STARTING POINT ONLY. IT WILL NOT BE UPDATED WITH SCHEMA CHANGES.
 
 type Resolver struct{}
@@ -47,13 +47,14 @@ func (r *queryResolver) Todos(ctx context.Context, opts FindTodoOptions) ([]*Tod
 }
 
 func (r *queryResolver) GetError(ctx context.Context) (string, error) {
-	err := &gqlerror.Error{
-		Message: "oops, something bad happened",
-		Extensions: map[string]interface{}{
-			"code": "10-4",
-		},
-	}
-	return "", err
+	// err := &gqlerror.Error{
+	// 	Message: "oops, something bad happened",
+	// 	Extensions: map[string]interface{}{
+	// 		"code": "10-4",
+	// 	},
+	// }
+	// return "", err
+	return "", errors.New("abc")
 
 }
 

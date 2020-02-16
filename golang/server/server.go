@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"golang"
 	"net/http"
 	"os"
@@ -8,6 +9,7 @@ import (
 	"github.com/99designs/gqlgen/handler"
 	"github.com/jasonsoft/log"
 	"github.com/jasonsoft/log/handlers/console"
+	"github.com/vektah/gqlparser/gqlerror"
 )
 
 const defaultPort = "8080"
@@ -26,7 +28,26 @@ func main() {
 	defer log.Flush()
 
 	http.Handle("/", handler.Playground("GraphQL playground", "/query"))
-	http.Handle("/query", handler.GraphQL(golang.NewExecutableSchema(golang.Config{Resolvers: &golang.Resolver{}})))
+
+	graphQLConfig := golang.Config{
+		Resolvers: &golang.Resolver{},
+	}
+
+	http.Handle("/query", handler.GraphQL(golang.NewExecutableSchema(graphQLConfig),
+		handler.ErrorPresenter(
+			func(ctx context.Context, e error) *gqlerror.Error {
+				err := &gqlerror.Error{
+					Message: "oops, something bad happened",
+					Extensions: map[string]interface{}{
+						"code": "10-4",
+					},
+				}
+
+				log.WithError(e).Error("error presenter")
+
+				return err
+			}),
+	))
 
 	log.Infof("connect to http://localhost:%s/ for GraphQL playground", port)
 	http.ListenAndServe(":"+port, nil)

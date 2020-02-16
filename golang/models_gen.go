@@ -7,14 +7,16 @@ import (
 	"io"
 	"strconv"
 	"time"
+
+	"github.com/jasonsoft/gqlgen-scalar/model"
 )
 
 type FindTodoOptions struct {
-	Page     int    `json:"page"`
-	PageSize int    `json:"pageSize"`
-	Text     string `json:"text"`
-	Count    int    `json:"count"`
-	Done     *bool  `json:"done"`
+	Page     model.Int64 `json:"page"`
+	PageSize int         `json:"pageSize"`
+	Text     string      `json:"text"`
+	Count    int         `json:"count"`
+	Done     *bool       `json:"done"`
 }
 
 type NewTodo struct {

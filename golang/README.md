@@ -1,5 +1,9 @@
-## re-generate code
-
+## generate code
+第一次執行
+```
+go run github.com/99designs/gqlgen init
+```
+重新更新
 ```
 go run github.com/99designs/gqlgen -v
 ```

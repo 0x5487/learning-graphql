@@ -9,6 +9,9 @@ exec:
   filename: generated.go
 model:
   filename: models_gen.go
+models:
+  Int64:
+    model: github.com/jasonsoft/gqlgen-scalar/model.Int64
 resolver:
   filename: resolver.go
   type: Resolver

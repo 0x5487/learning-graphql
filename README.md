@@ -6,6 +6,7 @@
 1. Error handling
 1. write schema ( including error, comments)
 1. 因為 graphql 本身沒有 date 的型別，需要解決 date 格式的問題
+1. Graphql 的 ID 是一種語意的 type
 
 ## why we are using graphql
 1. aggregation layer

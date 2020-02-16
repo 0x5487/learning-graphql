@@ -1,4 +1,6 @@
 scalar Time
+scalar Banned
+scalar Int64
 
 type Todo {
   id: ID!
@@ -27,7 +29,7 @@ input NewTodo {
 }
 
 input FindTodoOptions {
-  page: Int!
+  page: Int64!
   pageSize: Int!
   text: String!
   count: Int!

@@ -13,6 +13,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
+	"github.com/jasonsoft/gqlgen-scalar/model"
 	"github.com/vektah/gqlparser"
 	"github.com/vektah/gqlparser/ast"
 )
@@ -257,6 +258,8 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 
 var parsedSchema = gqlparser.MustLoadSchema(
 	&ast.Source{Name: "schema.graphql", Input: `scalar Time
+scalar Banned
+scalar Int64
 
 type Todo {
   id: ID!
@@ -285,7 +288,7 @@ input NewTodo {
 }
 
 input FindTodoOptions {
-  page: Int!
+  page: Int64!
   pageSize: Int!
   text: String!
   count: Int!
@@ -2115,7 +2118,7 @@ func (ec *executionContext) unmarshalInputFindTodoOptions(ctx context.Context, o
 		switch k {
 		case "page":
 			var err error
-			it.Page, err = ec.unmarshalNInt2int(ctx, v)
+			it.Page, err = ec.unmarshalNInt642githubᚗcomᚋjasonsoftᚋgqlgenᚑscalarᚋmodelᚐInt64(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -2662,6 +2665,15 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) unmarshalNInt642githubᚗcomᚋjasonsoftᚋgqlgenᚑscalarᚋmodelᚐInt64(ctx context.Context, v interface{}) (model.Int64, error) {
+	var res model.Int64
+	return res, res.UnmarshalGQL(v)
+}
+
+func (ec *executionContext) marshalNInt642githubᚗcomᚋjasonsoftᚋgqlgenᚑscalarᚋmodelᚐInt64(ctx context.Context, sel ast.SelectionSet, v model.Int64) graphql.Marshaler {
+	return v
 }
 
 func (ec *executionContext) unmarshalNNewTodo2golangᚐNewTodo(ctx context.Context, v interface{}) (NewTodo, error) {
